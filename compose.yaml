@@ -1,6 +1,7 @@
 # Linux host prerequisite: sudo sysctl -w vm.max_map_count=524288
 services:
   db:
+    # SonarQube Community Build 26.8+ supports PostgreSQL 15 to 18.
     image: postgres:18
     restart: unless-stopped
     environment:
@@ -18,7 +19,8 @@ services:
       start_period: 10s
 
   sonarqube:
-    image: sonarqube:community
+    # Pinned release; see docs/adr/0003-pin-sonarqube-community-build-release.md before changing.
+    image: sonarqube:26.10.0.133078-community
     restart: unless-stopped
     depends_on:
       db:

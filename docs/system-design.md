@@ -42,7 +42,7 @@ This repository runs a local SonarQube Community Build server and PostgreSQL 18 
 
 ## Background and constraints
 
-The local stack uses the published `sonarqube:community` and `postgres:18` images. The server starts after PostgreSQL passes its health check. Linux hosts must set `vm.max_map_count` to at least `524288`. The Compose file publishes port `9000` on all host interfaces and uses a local fallback database password; operators should treat the setup as a workstation-only service.
+The local stack uses the published `sonarqube:26.10.0.133078-community` and `postgres:18` images. The SonarQube release is pinned so upgrades and their schema migrations are deliberate; this release supports PostgreSQL 15 to 18 ([ADR-0003](adr/0003-pin-sonarqube-community-build-release.md)). The server starts after PostgreSQL passes its health check. Linux hosts must set `vm.max_map_count` to at least `524288`. The Compose file publishes port `9000` on all host interfaces and uses a local fallback database password; operators should treat the setup as a workstation-only service.
 
 ## Proposed architecture and ownership
 
@@ -57,7 +57,7 @@ flowchart LR
     U[url-shortener scanner]
     W[web-crawler scanner]
   end
-  N -->|analysis report| SQ[SonarQube Community Build :9000]
+  N -->|analysis report| SQ[SonarQube Community Build 26.10 :9000]
   O -->|analysis report| SQ
   S -->|analysis report| SQ
   U -->|analysis report| SQ
@@ -115,6 +115,7 @@ The Compose file uses a local development database password by default and publi
 - **Build/start prerequisites:** Docker Engine with the Compose plugin; Linux hosts also need `vm.max_map_count=524288`. This repository pulls published images and does not build application images.
 - **Use prerequisites:** a browser, available host port `9000`, and a running Compose stack. Scanner consumers require their own documented scanner tools and project settings.
 - **Deploy/use:** from the repository root, run `docker compose up -d`, then open `http://localhost:9000`. See the [project README](../README.md) for Codex MCP configuration.
+- **Upgrade:** bump the pinned SonarQube tag only after checking the vendor database requirements and backing up PostgreSQL; follow the [README upgrade procedure](../README.md#upgrade-sonarqube).
 - **Undeploy with persistence:** run `docker compose down`; named volumes remain. Run `docker compose down -v` only to intentionally remove the database, project state, history, extensions, and logs.
 - **Kubernetes resources:** not applicable; this repository defines Docker Compose services and no Kubernetes pods.
 
@@ -139,6 +140,8 @@ Keep the current local Compose stack and named volumes for the single-user workf
 ## References
 
 - [Compose configuration](../compose.yaml)
+- [ADR-0003: Pin the SonarQube Community Build Release](adr/0003-pin-sonarqube-community-build-release.md)
+- [SonarQube Community Build database requirements](https://docs.sonarsource.com/sonarqube-community-build/server-installation/installing-the-database)
 - [Project README](../README.md)
 - [Contract catalog](contracts/README.md)
 - [Database model boundary](database-model.md)

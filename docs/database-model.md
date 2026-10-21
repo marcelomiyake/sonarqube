@@ -11,7 +11,7 @@ There are no repository-owned table definitions, columns, or migrations in this 
 - **Application consumers:** `sonarqube` / the Compose-managed SonarQube server is the only database client in this repository. Scanner clients use SonarQube's HTTP contract and do not connect to PostgreSQL.
 - **Versioned local contract:** PostgreSQL connection variables and named-volume persistence in [`compose.yaml`](../compose.yaml).
 
-Use the vendor's supported upgrade and backup procedures for the deployed release. Do not query or modify internal tables directly as an application integration.
+Use the vendor's supported upgrade and backup procedures for the deployed release; the [README upgrade procedure](../README.md#upgrade-sonarqube) covers backup before a version bump. Do not query or modify internal tables directly as an application integration.
 
 ## Related documentation
 

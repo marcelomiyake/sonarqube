@@ -6,6 +6,7 @@ This index records the significant architectural choices for the local SonarQube
 
 - [ADR-0001: Keep the Local SonarQube Stack in Docker Compose](0001-keep-sonarqube-local-with-compose.md)
 - [ADR-0002: Use PostgreSQL for SonarQube State](0002-use-postgresql-for-sonarqube-state.md)
+- [ADR-0003: Pin the SonarQube Community Build Release](0003-pin-sonarqube-community-build-release.md)
 
 ## Maintaining this log
 

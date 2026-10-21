@@ -72,7 +72,7 @@ Keep the local SonarQube Community Build and PostgreSQL 18 services in Docker Co
 
 ## Evidence and realization
 
-- The [Compose manifest](../../compose.yaml) defines `sonarqube:community`, `postgres:18`, health-check ordering, port 9000, and four named volumes.
+- The [Compose manifest](../../compose.yaml) defines `sonarqube:26.10.0.133078-community` (pinned by [ADR-0003](0003-pin-sonarqube-community-build-release.md)), `postgres:18`, health-check ordering, port 9000, and four named volumes.
 - The [System Design](../system-design.md) describes consumers, contracts, persistence, security, and operations.
 - The [project README](../../README.md) documents startup and cleanup commands, including the data-retention difference between `down` and `down -v`.
 - The five known consumers and their scanner paths are recorded in the [contract catalog](../contracts/README.md).

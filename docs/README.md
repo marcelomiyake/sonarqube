@@ -43,6 +43,7 @@ Use this index to find the repository overview, agent guidance, architecture, co
 - [docs/adr/README.md](adr/README.md) — Architectural Decision Records index and maintenance guidance
 - [docs/adr/0001-keep-sonarqube-local-with-compose.md](adr/0001-keep-sonarqube-local-with-compose.md) — ADR-0001: Keep the Local SonarQube Stack in Docker Compose
 - [docs/adr/0002-use-postgresql-for-sonarqube-state.md](adr/0002-use-postgresql-for-sonarqube-state.md) — ADR-0002: Use PostgreSQL for SonarQube State
+- [docs/adr/0003-pin-sonarqube-community-build-release.md](adr/0003-pin-sonarqube-community-build-release.md) — ADR-0003: Pin the SonarQube Community Build Release
 
 ## Standards and reusable templates
 

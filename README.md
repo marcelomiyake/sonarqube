@@ -1,6 +1,6 @@
 # Local SonarQube
 
-This Compose setup runs SonarQube Community Build with PostgreSQL 18.
+This Compose setup runs SonarQube Community Build 26.10.0.133078 with PostgreSQL 18. This release supports PostgreSQL 15 to 18; see [ADR-0003](docs/adr/0003-pin-sonarqube-community-build-release.md) for why the version is pinned.
 
 A complete document map is available in the [Documentation index](docs/README.md).
 
@@ -10,6 +10,7 @@ A complete document map is available in the [Documentation index](docs/README.md
 - [Connect Codex to SonarQube MCP](#connect-codex-to-sonarqube-mcp)
 - [Persistent volumes](#persistent-volumes)
 - [Stop](#stop)
+- [Upgrade SonarQube](#upgrade-sonarqube)
 - [Build and use prerequisites](#build-and-use-prerequisites)
 - [Deploy and undeploy](#deploy-and-undeploy)
 - [Screenshots](#screenshots)
@@ -72,6 +73,35 @@ docker compose down
 ```
 
 Start them again with `docker compose up -d`.
+
+## Upgrade SonarQube
+
+`compose.yaml` pins an exact SonarQube release. The first time a newer release starts, it migrates the existing database schema, and the migration cannot be reversed without a backup. This applies when you bump the tag, and also when you start this repository's pinned release against volumes created by an older version.
+
+1. Check SonarSource's [update path](https://docs.sonarsource.com/sonarqube-community-build/server-update-and-maintenance/update) and [database requirements](https://docs.sonarsource.com/sonarqube-community-build/server-installation/installing-the-database) for the target release. Community Build 26.10 supports PostgreSQL 15 to 18.
+2. Stop SonarQube and back up the database to a file outside this repository. The dump contains your project data.
+
+   ```sh
+   docker compose stop sonarqube
+   docker compose exec -T db pg_dump -U sonar -d sonarqube -Fc > ~/sonarqube-$(date +%F).dump
+   ```
+
+3. Update the `sonarqube` image tag in `compose.yaml` if you are bumping the version. Then pull and start the stack:
+
+   ```sh
+   docker compose pull
+   docker compose up -d
+   ```
+
+4. Open [http://localhost:9000/setup](http://localhost:9000/setup) if SonarQube asks for a database upgrade, then reanalyze projects.
+
+To roll back, restore the previous image tag in `compose.yaml`. Then restore the dump before starting SonarQube:
+
+```sh
+docker compose stop sonarqube
+docker compose exec -T db pg_restore -U sonar -d sonarqube --clean --if-exists --no-owner < ~/sonarqube-YYYY-MM-DD.dump
+docker compose up -d
+```
 
 ## Build and use prerequisites
 
