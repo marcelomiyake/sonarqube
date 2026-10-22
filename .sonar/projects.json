@@ -1,0 +1,11 @@
+{
+  "policy": "Use a Sonar project for each real component; retain existing aggregate history.",
+  "projects": [
+    {
+      "component": "repository",
+      "directory": ".",
+      "key": "marcelomiyake_sonarqube",
+      "kind": "configuration"
+    }
+  ]
+}
